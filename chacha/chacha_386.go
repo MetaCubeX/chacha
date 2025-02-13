@@ -18,10 +18,10 @@ func init() {
 }
 
 func initialize(state *[64]byte, key []byte, nonce *[16]byte) {
-	binary.LittleEndian.PutUint32(state[0:], sigma[0])
-	binary.LittleEndian.PutUint32(state[4:], sigma[1])
-	binary.LittleEndian.PutUint32(state[8:], sigma[2])
-	binary.LittleEndian.PutUint32(state[12:], sigma[3])
+	binary.LittleEndian.PutUint32(state[0:], sigma0)
+	binary.LittleEndian.PutUint32(state[4:], sigma1)
+	binary.LittleEndian.PutUint32(state[8:], sigma2)
+	binary.LittleEndian.PutUint32(state[12:], sigma3)
 	copy(state[16:], key[:])
 	copy(state[48:], nonce[:])
 }
