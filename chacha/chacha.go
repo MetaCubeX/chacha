@@ -106,6 +106,8 @@ type Cipher struct {
 	off          int
 	rounds       int // 20 for ChaCha20
 	noncesize    int
+
+	ignoreCounterOverflow bool
 }
 
 // NewCipher returns a new *chacha.Cipher implementing the ChaCha20/r or XChaCha20/r
@@ -163,19 +165,21 @@ func (c *Cipher) XORKeyStream(dst, src []byte) {
 		c.off = 0
 	}
 
-	// check for counter overflow
-	blocksToXOR := len(src) / 64
-	if len(src)%64 != 0 {
-		blocksToXOR++
-	}
-	var overflow bool
-	if c.noncesize == INonceSize {
-		overflow = binary.LittleEndian.Uint32(c.state[48:]) > math.MaxUint32-uint32(blocksToXOR)
-	} else {
-		overflow = binary.LittleEndian.Uint64(c.state[48:]) > math.MaxUint64-uint64(blocksToXOR)
-	}
-	if overflow {
-		panic("chacha20/chacha: counter overflow")
+	if !c.ignoreCounterOverflow {
+		// check for counter overflow
+		blocksToXOR := len(src) / 64
+		if len(src)%64 != 0 {
+			blocksToXOR++
+		}
+		var overflow bool
+		if c.noncesize == INonceSize {
+			overflow = binary.LittleEndian.Uint32(c.state[48:]) > math.MaxUint32-uint32(blocksToXOR)
+		} else {
+			overflow = binary.LittleEndian.Uint64(c.state[48:]) > math.MaxUint64-uint64(blocksToXOR)
+		}
+		if overflow {
+			panic("chacha20/chacha: counter overflow")
+		}
 	}
 
 	c.off += xorKeyStream(dst, src, &(c.block), &(c.state), c.rounds)
@@ -190,6 +194,12 @@ func (c *Cipher) SetCounter(ctr uint64) {
 		binary.LittleEndian.PutUint64(c.state[48:], ctr)
 	}
 	c.off = 0
+}
+
+// SetIgnoreCounterOverflow ignore the counter-overflow check.
+// It's unsafe but useful for compatible
+func (c *Cipher) SetIgnoreCounterOverflow(b bool) {
+	c.ignoreCounterOverflow = b
 }
 
 // HChaCha20 generates 32 pseudo-random bytes from a 128 bit nonce and a 256 bit secret key.
