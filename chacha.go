@@ -37,14 +37,14 @@ func NewChaCha20(nonce, key []byte) (cipher.Stream, error) {
 	return chacha.NewCipher(nonce, key, 20)
 }
 
-// NewChaCha20IgnoreCounterFlower returns a cipher.Stream implementing the ChaCha20 or XChaCha20
+// NewChaCha20IgnoreCounterOverflow returns a cipher.Stream implementing the ChaCha20 or XChaCha20
 // stream cipher. The nonce must be unique for one key for all time.
 // The length of the nonce determinds the version of ChaCha20:
 // - NonceSize:  ChaCha20/r with a 64 bit nonce and a 2^64 * 64 byte period.
 // - INonceSize: ChaCha20/r as defined in RFC 7539 and a 2^32 * 64 byte period.
 // - XNonceSize: XChaCha20/r with a 192 bit nonce and a 2^64 * 64 byte period.
 // If the nonce is neither 64, 96 nor 192 bits long, a non-nil error is returned.
-func NewChaCha20IgnoreCounterFlower(nonce, key []byte) (cipher.Stream, error) {
+func NewChaCha20IgnoreCounterOverflow(nonce, key []byte) (cipher.Stream, error) {
 	c, err := chacha.NewCipher(nonce, key, 20)
 	if err != nil {
 		return nil, err
@@ -64,14 +64,14 @@ func NewChaCha12(nonce, key []byte) (cipher.Stream, error) {
 	return chacha.NewCipher(nonce, key, 12)
 }
 
-// NewChaCha12IgnoreCounterFlower returns a cipher.Stream implementing the ChaCha12 or XChaCha12
+// NewChaCha12IgnoreCounterOverflow returns a cipher.Stream implementing the ChaCha12 or XChaCha12
 // stream cipher. The nonce must be unique for one key for all time.
 // The length of the nonce determinds the version of ChaCha20:
 // - NonceSize:  ChaCha20/r with a 64 bit nonce and a 2^64 * 64 byte period.
 // - INonceSize: ChaCha20/r as defined in RFC 7539 and a 2^32 * 64 byte period.
 // - XNonceSize: XChaCha20/r with a 192 bit nonce and a 2^64 * 64 byte period.
 // If the nonce is neither 64, 96 nor 192 bits long, a non-nil error is returned.
-func NewChaCha12IgnoreCounterFlower(nonce, key []byte) (cipher.Stream, error) {
+func NewChaCha12IgnoreCounterOverflow(nonce, key []byte) (cipher.Stream, error) {
 	c, err := chacha.NewCipher(nonce, key, 12)
 	if err != nil {
 		return nil, err
@@ -91,14 +91,14 @@ func NewChaCha8(nonce, key []byte) (cipher.Stream, error) {
 	return chacha.NewCipher(nonce, key, 8)
 }
 
-// NewChaCha8IgnoreCounterFlower returns a cipher.Stream implementing the ChaCha8 or XChaCha8
+// NewChaCha8IgnoreCounterOverflow returns a cipher.Stream implementing the ChaCha8 or XChaCha8
 // stream cipher. The nonce must be unique for one key for all time.
 // The length of the nonce determinds the version of ChaCha8:
 // - NonceSize:  ChaCha20/r with a 64 bit nonce and a 2^64 * 64 byte period.
 // - INonceSize: ChaCha20/r as defined in RFC 7539 and a 2^32 * 64 byte period.
 // - XNonceSize: XChaCha20/r with a 192 bit nonce and a 2^64 * 64 byte period.
 // If the nonce is neither 64, 96 nor 192 bits long, a non-nil error is returned.
-func NewChaCha8IgnoreCounterFlower(nonce, key []byte) (cipher.Stream, error) {
+func NewChaCha8IgnoreCounterOverflow(nonce, key []byte) (cipher.Stream, error) {
 	c, err := chacha.NewCipher(nonce, key, 8)
 	if err != nil {
 		return nil, err
